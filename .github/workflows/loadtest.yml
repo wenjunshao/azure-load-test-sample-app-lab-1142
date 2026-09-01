@@ -30,8 +30,8 @@ jobs:
 
       # Run the load test
       - name: Azure Load Testing
-        # Use the maintained major tag instead of an older pinned commit.
-        uses: azure/load-testing@v1
+        # v1 still resolves to the failing runtime; pin to the current upstream commit.
+        uses: azure/load-testing@09c53cb9c4bea539ae8634dc76673a36474e250c
         with:
           loadTestConfigFile: 'config.yaml'
           loadTestResource: ${{ env.LOAD_TEST_RESOURCE}}
