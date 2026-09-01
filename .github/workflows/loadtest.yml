@@ -62,6 +62,7 @@ jobs:
 
       # upload the published website code artifacts
       - name: Upload artifact for deployment job
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: loadTestResults
