@@ -20,6 +20,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Checkout Azure Load Testing action
+        uses: actions/checkout@v4
+        with:
+          repository: Azure/load-testing
+          ref: 09c53cb9c4bea539ae8634dc76673a36474e250c
+          path: .github/actions/azure-load-testing
+
+      - name: Set up Node.js for Azure Load Testing action
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install Azure Load Testing action dependencies
+        run: npm ci
+        working-directory: ./.github/actions/azure-load-testing
+
       #Login in your azure subscription using OpenID Connect (credentials stored as GitHub secrets in repo)
       - name: Azure Login
         uses: azure/login@v2
@@ -30,8 +46,8 @@ jobs:
 
       # Run the load test
       - name: Azure Load Testing
-        # v1 still resolves to the failing runtime; pin to the current upstream commit.
-        uses: azure/load-testing@09c53cb9c4bea539ae8634dc76673a36474e250c
+        # Use the checked-out action source plus installed dependencies to avoid the broken published package.
+        uses: ./.github/actions/azure-load-testing
         with:
           loadTestConfigFile: 'config.yaml'
           loadTestResource: ${{ env.LOAD_TEST_RESOURCE}}
